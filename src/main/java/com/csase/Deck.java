@@ -1,4 +1,5 @@
 package com.csase;
+import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ public class Deck {
 	/**
 	 * cards contains all the cards in the deck.
 	 */
-	private ArrayList<Card> cards;
+	private List<Card> cards;
 
 	/**
 	 * size is the number of not-yet-dealt cards.
@@ -31,8 +32,10 @@ public class Deck {
 	 */
 	public Deck(String[] ranks, String[] suits, int[] values) {
 		cards = new ArrayList<Card>();
-		for (int i = 0; i < ranks.length; i++) {
-			cards.add(new Card(ranks[i], suits[i], values[i]));
+		for (int j = 0; j < ranks.length; j++) {
+			for (String suitString : suits) {
+				cards.add(new Card(ranks[j], suitString, values[j]));
+			}
 		}
 		size = cards.size();
 		shuffle();
@@ -44,7 +47,7 @@ public class Deck {
 	 * @return true if this deck is empty, false otherwise.
 	 */
 	public boolean isEmpty() {
-		return cards.isEmpty();
+		return size == 0;
 	}
 
 	/**
@@ -60,7 +63,13 @@ public class Deck {
 	 * and reset the size to represent the entire deck.
 	 */
 	public void shuffle() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 4 *** */
+		for (int k = cards.size() - 1; k > 0; k--) {
+			int r = (int)(Math.random() * (k + 1));
+
+			Card temp = cards.get(k);
+			cards.set(k, cards.get(r));
+			cards.set(r, temp);
+		}
 	}
 
 	/**
@@ -70,8 +79,8 @@ public class Deck {
 	 */
 	public Card deal() {
 		if (isEmpty()) {
-   			return null;
-  		}
+			return null;
+		}
 		size--;
 		return cards.get(size);
 	}
